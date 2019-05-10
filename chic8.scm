@@ -36,17 +36,14 @@
                                             (a . 7)   (s . 8)   (d . 9) (f . #xE)
                                             (z . #xA) (x . 0) (c . #xB) (v . #xF))))
 
-(define (key-down! ev)
+(define (handle-keyboard-event! ev)
   (let ((sc (sdl2:keyboard-event-scancode ev)))
-    (if (and (= 0 (sdl2:keyboard-event-repeat ev)) (hash-table-exists? keymap sc))
-            (begin (vector-set! keypad (hash-table-ref keymap sc) #t)
-                   (print keypad)))))
-
-(define (key-up! ev)
-  (let ((sc (sdl2:keyboard-event-scancode ev)))
-    (if (and (= 0 (sdl2:keyboard-event-repeat ev)) (hash-table-exists? keymap sc))
-            (begin (vector-set! keypad (hash-table-ref keymap sc) #f)
-                   (print keypad)))))
+   (if (and (= 0 (sdl2:keyboard-event-repeat ev))
+            (hash-table-exists? keymap sc))
+       (begin (vector-set! keypad
+                           (hash-table-ref keymap sc)
+                           (sdl2:keyboard-event-state ev))
+              (print keypad)))))
 
 (define (render-display!)
   (let ((window-surf (sdl2:window-surface window)))
@@ -60,11 +57,8 @@
        ((window)
         (render-display!))
 
-       ((key-down)
-        (key-down! ev))
-
-       ((key-up)
-        (key-up! ev))
+       ((key-down key-up)
+        (handle-keyboard-event! ev))
 
        ((quit)
         (set! done #t)))))
