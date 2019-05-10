@@ -1,5 +1,6 @@
 (import (chicken condition)
         (chicken format)
+        srfi-69
         (prefix sdl2 sdl2:))
 
 ;;; Initialize the parts of SDL that we need.
@@ -28,6 +29,25 @@
    'centered  'centered                 ; x, y
    800  600))                           ; w, h
 
+(define keypad (make-vector 16 #f))
+
+(define keymap (alist->hash-table '((n-1 . 1) (n-2 . 2) (n-3 . 3) (n-4 . #xC)
+                                            (q . 4)   (w . 5)   (e . 6)   (r . #xD)
+                                            (a . 7)   (s . 8)   (d . 9) (f . #xE)
+                                            (z . #xA) (x . 0) (c . #xB) (v . #xF))))
+
+(define (key-down! ev)
+  (let ((sc (sdl2:keyboard-event-scancode ev)))
+        (if (hash-table-exists? keymap sc)
+            (begin (vector-set! keypad (hash-table-ref keymap sc) #f)
+                   (print keypad)))))
+
+(define (key-up! ev)
+  (let ((sc (sdl2:keyboard-event-scancode ev)))
+        (if (hash-table-exists? keymap sc)
+            (begin (vector-set! keypad (hash-table-ref keymap sc) #t)
+                   (print keypad)))))
+
 (define (render-display!)
   (let ((window-surf (sdl2:window-surface window)))
    (sdl2:fill-rect! window-surf #f (sdl2:make-color 0 80 160))
@@ -39,6 +59,12 @@
      (case (sdl2:event-type ev)
        ((window)
         (render-display!))
+
+       ((key-down)
+        (key-down! ev))
+
+       ((key-up)
+        (key-up! ev))
 
        ((quit)
         (set! done #t)))))
