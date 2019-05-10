@@ -38,14 +38,14 @@
 
 (define (key-down! ev)
   (let ((sc (sdl2:keyboard-event-scancode ev)))
-        (if (hash-table-exists? keymap sc)
-            (begin (vector-set! keypad (hash-table-ref keymap sc) #f)
+    (if (and (= 0 (sdl2:keyboard-event-repeat ev)) (hash-table-exists? keymap sc))
+            (begin (vector-set! keypad (hash-table-ref keymap sc) #t)
                    (print keypad)))))
 
 (define (key-up! ev)
   (let ((sc (sdl2:keyboard-event-scancode ev)))
-        (if (hash-table-exists? keymap sc)
-            (begin (vector-set! keypad (hash-table-ref keymap sc) #t)
+    (if (and (= 0 (sdl2:keyboard-event-repeat ev)) (hash-table-exists? keymap sc))
+            (begin (vector-set! keypad (hash-table-ref keymap sc) #f)
                    (print keypad)))))
 
 (define (render-display!)
