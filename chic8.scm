@@ -31,10 +31,15 @@
 
 (define keypad (make-vector 16 #f))
 
-(define keymap (alist->hash-table '((n-1 . 1) (n-2 . 2) (n-3 . 3) (n-4 . #xC)
-                                            (q . 4)   (w . 5)   (e . 6)   (r . #xD)
-                                            (a . 7)   (s . 8)   (d . 9) (f . #xE)
-                                            (z . #xA) (x . 0) (c . #xB) (v . #xF))))
+(define keymap (alist->hash-table (map cons
+                                       '(n-1 n-2 n-3 n-4
+                                             q w e r
+                                             a s d f
+                                             z x c v)
+                                       (list 1 2 3 #xC
+                                             4 5 6 #xD
+                                             7 8 9 #xE
+                                             #xA 0 #xB #xF))))
 
 (define (handle-keyboard-event! ev)
   (let ((sc (sdl2:keyboard-event-scancode ev)))
