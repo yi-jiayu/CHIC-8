@@ -5,6 +5,7 @@ jobs:
       - image: jiayuyi/chicken:circleci
     steps:
       - checkout
+      - run: ./dependencies.sh
       - run: csi *-test.scm
 workflows:
   version: 2
