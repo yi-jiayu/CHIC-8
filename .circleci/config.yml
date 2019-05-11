@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: jiayuyi/chicken:circleci
+    steps:
+      - checkout
+      - run: csi *-test.scm
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
