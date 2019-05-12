@@ -1,5 +1,7 @@
-(import test)
-(load "instruction.scm")
+(include-relative "instruction")
+
+(import test
+        instruction)
 
 (define instr '(#x0A . #xBC))
 

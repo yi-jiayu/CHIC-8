@@ -1,4 +1,8 @@
-(load "interpreter.scm")
+(include-relative "interpreter")
+(include-relative "instruction")
+
+(import interpreter
+        instruction)
 
 (define (subroutine-return! ip instr)
   (let ((sp (- (interpreter-sp ip) 1)))
@@ -10,4 +14,4 @@
                (interpreter-sp ip)
                (interpreter-pc ip))
   (set! (interpreter-sp ip) (+ 1 (interpreter-sp ip)))
-  (set! (interpreter-pc ip) instr))
+  (set! (interpreter-pc ip) (instr-addr instr)))
