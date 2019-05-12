@@ -1,6 +1,19 @@
 (import test)
 (load "instruction.scm")
 
+(define instr '(#x0A . #xBC))
+
 (test-group "instr-addr"
-            (let ((instr '(#x0A . #xBC)))
-             (test "addr of opcode 0x0ABC should be 0xABC" #xABC (instr-addr instr))))
+  (test #xABC (instr-addr instr)))
+ 
+(test-group "instr-nibble"
+  (test #xC (instr-nibble instr)))
+
+(test-group "instr-x"
+  (test #xA (instr-x instr)))
+
+(test-group "instr-y"
+  (test #xB (instr-y instr)))
+
+(test-group "instr-byte"
+  (test #xBC (instr-byte instr)))
