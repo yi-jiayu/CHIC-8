@@ -5,7 +5,7 @@ jobs:
       - image: jiayuyi/chicken:circleci
     steps:
       - checkout
-      - run: ./dependencies.sh
+      - run: chicken-install -from-list eggs.scm
       - run: csi *-test.scm
 workflows:
   version: 2
